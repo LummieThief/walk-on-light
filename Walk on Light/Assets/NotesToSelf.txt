@@ -1,0 +1,36 @@
+Ok I need to write this down before I forget.
+So, basically, there are 2 cameras: the scene camera and the render texture camera.
+The scene camera is the one that actually renders the image to the screen, and it 
+has a pixel perfect camera component on it so that the sprites look good. This 
+camera ignores the obstacles layer (or whichever layer the background is rendered
+on, "obstacles" will probably change), meaning it looks at the player, any objects
+in the scene, etc. but ignores the background color and the lighting effect. The
+second camera is scaled to the exact same size as the pixel perfect camera, but it
+is not a pixel perfect camera. This is because ppc's (pixel perfect camera) cant
+draw to a render texture. The render texture camera exclusively looks at the background
+layer (everything that the other camera ignores) and renders it onto a low resolution
+render texture to achieve the pixelated effect. This render texture is then placed
+in the background, behind all of the elements that the scene camera sees, such that
+when the scene camera ignores the background layer, it looks through and instead
+sees the pixelated render texture and draws that instead. The render texture has
+to be placed directly behind the scene camera and has to follow it exactly or else
+the effect will break.
+
+
+
+Which references need to go where:
+The three main components of the system are LightSource, Polaroid, and Room.
+
+Room handles which room the player is in.
+LightSource handles creating the light mesh.
+Polaroid handles the player inputs.
+
+
+Each individual room needs to have its own light mesh and collider. Rooms dont need
+to have their own light source because they can just use the one that the player brings
+with them; however, each room needs to have a setup light that runs the first time the 
+room is loaded. Room is also responsable for sending an event when the active room
+changes.
+
+The polaroid needs a reference to the current room so that it can update its
+light mesh. It can keep a constant focus mesh
